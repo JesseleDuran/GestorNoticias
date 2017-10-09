@@ -21,4 +21,17 @@ module.exports = {
 		});
 	},
 
+	list: function(req, res) {
+		Category.find({}).exec(function(err, categories) {
+			if (err) {
+				res.serverError(err);
+			} else {
+				res.json({
+					success: "true",
+					data: categories
+				});
+			}
+		});
+	},
+
 };
