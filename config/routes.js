@@ -32,9 +32,36 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'homepage'
-  }
+    '/': {
+      view: 'homepage'
+    },
+
+  //News routes
+  'POST /news/crear': 'NewsController.create',
+  'GET /news/list': 'NewsController.list',
+  'GET /news/listByCategory': 'NewsController.listByCategory',
+
+  //Category routes
+  'POST /category/create': 'CategoryController.create',
+  'GET /category/list': 'CategoryController.list',
+
+  //Reporter routes
+
+  //Auth Routes
+    'GET /login': {
+        controller: 'AuthController',
+        action: 'login'
+    },
+    'POST /login': {
+        controller: 'AuthController',
+        action: 'process'
+    },
+    'GET /logout': {
+        controller: 'AuthController',
+        action: 'logout'
+    }
+
+
 
   /***************************************************************************
   *                                                                          *
@@ -45,16 +72,7 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-  //News routes
-  'POST /news/create':  'NewsController.create',
-  'GET /news/list':  'NewsController.list',
-  'GET /news/listByCategory':  'NewsController.listByCategory',
 
-  //Category routes
-  'POST /category/create':  'CategoryController.create',
-  'GET /category/list':  'CategoryController.list',
-
-  //Reporter routes
 
 
 };

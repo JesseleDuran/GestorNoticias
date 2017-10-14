@@ -8,29 +8,57 @@
 module.exports = {
 
 	create: function(req, res) {
-		News.create({
-			titulo: req.body.titulo,
-			cuerpo: req.body.cuerpo,
-			owner: req.body.ownerId,
-		}).exec(function(err, newRecord) {
-			if (err) {
-				res.serverError(err);
-			} else {
-				Category_news.create({
-					new: newRecord.id,
-					category: req.body.categoryId
-				}).exec(function(err, newRelation) {
+		Reporter.findOne({
+		  	id: req.body.ownerId
+		}).exec(function (err, reporter){
+		  	if (err) {
+		    	return res.serverError(err);
+		  	}
+		  	if (!reporter) {
+				return res.json({
+					success: "false",
+					message: 'This reporter does not exist.',
+				});
+		  	}
+		  	sails.log('Found "%s"', reporter.name);
+
+			Category.findOne({
+			  	id: req.body.categoryId
+			}).exec(function (err, category){
+			  	if (err) {
+			    	return res.serverError(err);
+			  	}
+			  	if (!category) {
+					return res.json({
+						success: "false",
+						message: 'This category does not exist.',
+					});
+			  	}
+				News.create({
+					titulo: req.body.titulo,
+					cuerpo: req.body.cuerpo,
+					owner: req.body.ownerId,
+				}).exec(function(err, newRecord) {
 					if (err) {
 						res.serverError(err);
 					} else {
-						res.json({
-							success: "true",
-							new: newRecord,
-							relation: newRelation
+						Category_news.create({
+							new: newRecord.id,
+							category: req.body.categoryId
+						}).exec(function(err, newRelation) {
+							if (err) {
+								res.serverError(err);
+							} else {
+								res.json({
+									success: "true",
+									new: newRecord,
+									relation: newRelation
+								});
+							}
 						});
 					}
 				});
-			}
+			});
 		});
 	},
 
@@ -41,13 +69,13 @@ module.exports = {
   			}
 			else {
 				if (!news) {
-					res.json({
+					return res.json({
 						success: "false",
 						msg: "No hay noticias"
 					});
 				} else {
-					var arrayIdNews = news.map(function(new) {
-						return new.id;
+					var arrayIdNews = news.map(function(noticia) {
+						return noticia.id;
 					});
 
 					Category_news.find({
@@ -85,7 +113,7 @@ module.exports = {
 											}
 										}
 									}
-									res.json({
+									return res.json({
 										success: "true",
 										data: dataFinal
 									});
@@ -131,10 +159,16 @@ module.exports = {
 								success: "true",
 								news: news
 							});
-						}
+						});
 					}
-				}
+				});
 			}
 		});
 	},
+
+
+
+
+
+
 };
