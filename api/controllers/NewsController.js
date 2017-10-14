@@ -34,6 +34,8 @@ module.exports = {
 						message: 'This category does not exist.',
 					});
 			  	}
+
+				sails.log('Found "%s"', category.nombre);
 				News.create({
 					titulo: req.body.titulo,
 					cuerpo: req.body.cuerpo,
@@ -52,7 +54,7 @@ module.exports = {
 								res.json({
 									success: "true",
 									new: newRecord,
-									relation: newRelation
+									category_news: newRelation
 								});
 							}
 						});
@@ -77,65 +79,83 @@ module.exports = {
 					var arrayIdNews = news.map(function(noticia) {
 						return noticia.id;
 					});
+					var arrayIdOwners = news.map(function(noticia) {
+						return noticia.owner;
+					});
 
-					Category_news.find({
-						new: arrayIdNews
-					}).exec(function(err, relations) {
+					User.find({
+						id: arrayIdOwners
+					}).exec(function(err, users) {
 						if (err) {
 			    			return res.serverError(err);
 			  			}
 						else {
-							var arrayIdCategory = relations.map(function(relation) {
-								return relation.category;
-							});
-							Category.find({
-								id: arrayIdCategory
-							}).exec(function(err, categories) {
+							Category_news.find({
+								new: arrayIdNews
+							}).exec(function(err, relations) {
 								if (err) {
-					    			return res.serverError(err);
-					  			}
-								else {
-									var dataFinal = [];
-									var i;
-									var j;
-									var k;
-									for(i in relations) {
-										for(j in news) {
-											for(k in categories) {
+									return res.serverError(err);
+								}
+									var arrayIdCategory = relations.map(function(relation) {
+										return relation.category;
+									});
 
-												if(relations[i].new == news[j].id && relations[i].category == categories[k].id)
-												{
-													var data = {};
-													data.new = news[j];
-													data.category = categories[k];
-													dataFinal.push(data);
+									Category.find({
+										id: arrayIdCategory
+									}).exec(function(err, categories) {
+										if (err) {
+											return res.serverError(err);
+										}
+										else {
+											var dataFinal = [];
+											var i;
+											var j;
+											var k;
+											var m;
+											for(i in relations) {
+												for(j in news) {
+													for (m in users) {
+														for(k in categories) {
+
+															if(users[m].id == news[j].owner && relations[i].new == news[j].id && relations[i].category == categories[k].id)
+															{
+																var data = {};
+																data.new = news[j];
+																data.category = categories[k];
+																data.reporter = users[m];
+																dataFinal.push(data);
+															}
+														}
+													}
 												}
 											}
+											return res.json({
+												success: "true",
+												news: dataFinal
+											});
 										}
-									}
-									return res.json({
-										success: "true",
-										data: dataFinal
 									});
-								}
-							});
-						}
-					});
+								});
+							}
+
+						});
+					}
+
 				}
-			}
-		});
-	},
+			});
+		},
 
 	listByCategory: function(req, res) {
 		Category.findOne({
 			where: {
-				nombre: req.params.nombre
+				nombre: req.body.nombre
 			},
 		}).exec(function (err, category) {
   			if (err) {
     			return res.serverError(err);
   			}
 			else {
+				sails.log('Found "%s"', category.nombre);
 				Category_news.find({
 					where: {
 						category: category.id

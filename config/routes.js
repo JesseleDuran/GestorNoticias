@@ -39,15 +39,15 @@ module.exports.routes = {
   //News routes
   'POST /news/crear': 'NewsController.create',
   'GET /news/list': 'NewsController.list',
-  'GET /news/listByCategory': 'NewsController.listByCategory',
+  'POST /news/listByCategory': 'NewsController.listByCategory',
 
-  //Category routes
-  'POST /category/create': 'CategoryController.create',
+  //Category routes - done
+  'POST /category/crear': 'CategoryController.create',
   'GET /category/list': 'CategoryController.list',
 
-  //Reporter routes
+  //User/Reporter routes - done
 
-  //Auth Routes
+  //Auth Routes - done
     'GET /login': {
         controller: 'AuthController',
         action: 'login'

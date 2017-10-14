@@ -19,15 +19,16 @@
 
 module.exports.policies = {
 
-    '*': "authenticated",
+    /*'*': "authenticated",
 
     UserController: {
         "create": true,
+        "find": true
     },
-    
+
     AuthController: {
         '*': true,
-    }
+    }*/
 
   /***************************************************************************
   *                                                                          *

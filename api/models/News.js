@@ -9,12 +9,6 @@ module.exports = {
 
     attributes: {
 
-        id: {
-            type: 'integer',
-            primaryKey: true,
-            autoIncrement: true
-        },
-
         titulo: {
             type: 'string',
             required: true
