@@ -40,6 +40,8 @@ module.exports = {
 					titulo: req.body.titulo,
 					cuerpo: req.body.cuerpo,
 					owner: req.body.ownerId,
+					imagenRelevante: req.body.imagenRelevante,
+					videoOrImage: req.body.videoOrImage 
 				}).exec(function(err, newRecord) {
 					if (err) {
 						res.serverError(err);
@@ -185,6 +187,16 @@ module.exports = {
 			}
 		});
 	},
+
+	deleteAll: function(req, res) {
+		News.destroy({}).exec(function (err){
+  			if (err) {
+    			return res.negotiate(err);
+  			}
+  			sails.log('Delete noticias .');
+  			return res.ok();
+		});
+	}
 
 
 

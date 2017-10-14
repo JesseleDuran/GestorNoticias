@@ -21,7 +21,16 @@ module.exports = {
 
         owner: {
             model: 'user'
-        }
+        },
+
+        imagenRelevante: {
+            type: 'string',
+            required: true
+        },
+
+        videoOrImage: {
+            type: 'array'
+        },
 
     }
 };

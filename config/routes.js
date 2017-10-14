@@ -39,6 +39,7 @@ module.exports.routes = {
   //News routes
   'POST /news/crear': 'NewsController.create',
   'GET /news/list': 'NewsController.list',
+  'GET /news/delete': 'NewsController.deleteAll',
   'POST /news/listByCategory': 'NewsController.listByCategory',
 
   //Category routes - done
