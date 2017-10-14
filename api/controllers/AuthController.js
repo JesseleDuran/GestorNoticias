@@ -11,6 +11,7 @@ module.exports = {
 	login: function(req, res) {
 		res.view();
 	},
+	
 	process: function(req, res) {
 		passport.authenticate('local', function(err, user, info) {
 			if( (err)||(!user) ) {

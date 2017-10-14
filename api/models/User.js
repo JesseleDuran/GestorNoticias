@@ -7,9 +7,13 @@
 var bcrypt = require('bcrypt');
 module.exports = {
 
-  attributes: {
-      name: {
+    attributes: {
+        name: {
             type: 'string',
+        },
+        apellido: {
+            type: 'string',
+            required: true
         },
         email: {
             type: 'string',
@@ -20,6 +24,11 @@ module.exports = {
             type: 'string',
             required: true
         },
+
+        news: {
+            collection: 'news',
+            via: 'owner'
+        },
         // override default toJSON
         toJSON: function() {
             var obj = this.toObject();
@@ -27,11 +36,11 @@ module.exports = {
             return obj;
         }
 
-  },
+    },
 
-  beforeCreate: function(user, cb) {
-      bcrypt.genSalt(10, function(err, salt) {
-          bcrypt.hash(user.password, salt, function(err, hash) {
+    beforeCreate: function(user, cb) {
+        bcrypt.genSalt(10, function(err, salt) {
+            bcrypt.hash(user.password, salt, function(err, hash) {
             if(err) {
                 console.log(err);
                 cb(err);
@@ -41,6 +50,6 @@ module.exports = {
                 cb(null, user);
             }
           });
-      });
-  }
+        });
+    }
 };

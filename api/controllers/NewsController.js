@@ -8,7 +8,7 @@
 module.exports = {
 
 	create: function(req, res) {
-		Reporter.findOne({
+		User.findOne({
 		  	id: req.body.ownerId
 		}).exec(function (err, reporter){
 		  	if (err) {

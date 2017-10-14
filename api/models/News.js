@@ -26,7 +26,7 @@ module.exports = {
         },
 
         owner: {
-            model: 'reporter'
+            model: 'user'
         }
 
     }
